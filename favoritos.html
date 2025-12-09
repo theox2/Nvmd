@@ -53,7 +53,6 @@
       color: #fff;
     }
 
-    /* Grid de favoritos */
     .favorites-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -119,32 +118,6 @@
       transform: scale(1.1);
     }
 
-    .add-to-cart-btn {
-      position: absolute;
-      bottom: 12px;
-      left: 12px;
-      right: 12px;
-      padding: 12px;
-      background: var(--accent);
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all .3s;
-    }
-
-    .fav-item:hover .add-to-cart-btn {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .add-to-cart-btn:hover {
-      background: #fff;
-    }
-
     .fav-info {
       padding: 16px;
     }
@@ -163,7 +136,6 @@
       font-weight: 800;
     }
 
-    /* Empty state */
     .empty-favorites {
       text-align: center;
       padding: 80px 20px;
@@ -189,119 +161,34 @@
       font-size: 16px;
     }
 
-    /* Toast notification */
-    .toast {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: var(--accent);
-      color: #000;
-      padding: 16px 24px;
-      border-radius: 8px;
-      font-weight: 600;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      z-index: 9999;
-      animation: slideIn 0.3s ease;
-      display: none;
-    }
-
-    .toast.show {
-      display: block;
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateX(400px);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    /* Responsive */
-    @media(max-width: 768px) {
-      .page-title-fav {
-        font-size: 1.8rem;
-      }
-      
-      .favorites-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 15px;
-      }
-
-      .fav-img-wrapper {
-        height: 220px;
-      }
-
-      .clear-all-btn {
-        width: 100%;
-      }
+    .loading {
+      text-align: center;
+      padding: 80px 20px;
+      color: #14d0d6;
+      font-size: 1.2rem;
     }
   </style>
 </head>
 <body>
-  <!-- LOADER -->
-  <div id="loader">
-    <div class="spinner"></div>
-  </div>
+  <div id="loader"><div class="spinner"></div></div>
 
-  <!-- HEADER -->
   <header class="header">
     <div class="header-container">
       <div class="logo-area" onclick="location.href='index.html'">
-        <img src="Yellow_Black_Brush_Streetwear_Brand_Logo-removebg-preview.png" class="logo" alt="NovaModa">
+        <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png" class="logo" alt="NovaModa">
         <span class="brand">NovaModa</span>
       </div>
       
-      <nav class="nav-desktop" id="navDesktop">
-        <div class="nav-item">
-          <a href="index.html#novidades" class="nav-link">Novidades</a>
-        </div>
-        <div class="nav-item dropdown" id="catDropdown">
-          <a href="#" class="dropdown-toggle nav-link">Categorias</a>
-          <div class="mega-menu">
-            <div class="mega-col">
-              <h4>Por público</h4>
-              <a href="categorias.html?cat=masculino">Masculino</a>
-              <a href="categorias.html?cat=feminino">Feminino</a>
-              <a href="categorias.html?cat=infantil">Infantil</a>
-            </div>
-          </div>
-        </div>
-        <div class="nav-item">
-          <a href="index.html#promocoes" class="nav-link">Promoções</a>
-        </div>
-      </nav>
-
       <div class="right-area">
-        <div class="search-wrapper">
-          <input id="headerSearch" type="search" placeholder="Buscar produtos..." aria-label="Buscar">
-          <button id="searchBtn" aria-label="Pesquisar">🔍</button>
-        </div>
-        <div id="smartSearchResults" class="smart-search-results"></div>
-
         <a class="btn entrar-btn" href="login.html">Entrar</a>
-
         <div class="icons">
           <span class="icon" onclick="location.href='favoritos.html'">❤</span>
           <span class="icon" onclick="location.href='carrinho.html'">🛒<span class="cart-count">0</span></span>
-          <span class="icon" id="menuBtnMobile">☰</span>
         </div>
       </div>
     </div>
-
-    <!-- MOBILE MENU -->
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="index.html#novidades">Novidades</a>
-      <a href="categorias.html">Categorias</a>
-      <a href="index.html#promocoes">Promoções</a>
-      <a href="login.html">Entrar</a>
-    </div>
   </header>
 
-  <!-- MAIN -->
   <main class="container-favorites">
     <div class="page-header-fav">
       <div>
@@ -313,164 +200,218 @@
       <button class="clear-all-btn" id="clearAllBtn" style="display:none">Limpar Tudo</button>
     </div>
 
-    <!-- Empty Favorites -->
-    <div class="empty-favorites" id="emptyFavorites">
+    <div class="loading" id="loadingState">⏳ Carregando favoritos...</div>
+
+    <div class="empty-favorites" id="emptyFavorites" style="display:none">
       <div class="empty-fav-icon">💔</div>
       <h2>Nenhum favorito ainda</h2>
       <p>Adicione produtos aos favoritos para acompanhá-los aqui!</p>
       <a href="categorias.html" class="btn primary">Explorar Produtos</a>
     </div>
 
-    <!-- Favorites Grid -->
     <div class="favorites-grid" id="favoritesGrid" style="display:none">
       <!-- Produtos favoritos inseridos via JS -->
     </div>
   </main>
 
-  <!-- Toast Notification -->
-  <div class="toast" id="toast"></div>
-
-  <!-- SCRIPTS -->
-  <script src="js/animations.js"></script>
-  <script src="js/favorites.js"></script>
-  <script src="js/cart.js"></script>
+  <script>
+    window.API_BASE = window.location.origin + '/Novamoda/api';
+  </script>
+  
+  <script src="js/storage.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
 
   <script>
-    // Base de produtos
-    const produtosDB = [
-      {id:1, name:'Camiseta Oversized Street', price:129.90, img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800'},
-      {id:2, name:'Moletom Premium Black', price:249.90, img:'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800'},
-      {id:3, name:'Calça Cargo Utility', price:189.90, img:'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800'},
-      {id:4, name:'Jaqueta Bomber Vintage', price:299.90, img:'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800'},
-      {id:5, name:'Tênis Air Classic', price:599.90, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800'},
-      {id:6, name:'Boné Snapback Logo', price:79.90, img:'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800'},
-      {id:7, name:'Cropped Top Sport', price:99.90, img:'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=800'},
-      {id:8, name:'Legging High Waist', price:149.90, img:'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800'},
-      {id:9, name:'Shorts Cargo Kids', price:89.90, img:'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=800'},
-      {id:10, name:'Mochila Urban Pro', price:159.90, img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800'}
-    ];
+    /**
+     * FAVORITOS - 100% BANCO DE DADOS
+     */
+    
+    let favoriteProducts = [];
 
-    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    // ==========================================
+    // CARREGAR FAVORITOS DO BANCO
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', async () => {
+      await carregarFavoritos();
+      
+      if (typeof storage !== 'undefined' && storage.updateCartCount) {
+        storage.updateCartCount();
+      }
+    });
 
-    // Renderizar favoritos
-    function renderFavorites() {
-      const grid = document.getElementById('favoritesGrid');
+    async function carregarFavoritos() {
+      const loading = document.getElementById('loadingState');
       const empty = document.getElementById('emptyFavorites');
+      const grid = document.getElementById('favoritesGrid');
       const clearBtn = document.getElementById('clearAllBtn');
-      const countEl = document.getElementById('favCount');
 
-      countEl.textContent = `${favorites.length} ${favorites.length === 1 ? 'item' : 'itens'}`;
+      loading.style.display = 'block';
+      empty.style.display = 'none';
+      grid.style.display = 'none';
 
-      if (favorites.length === 0) {
-        grid.style.display = 'none';
+      // Verificar login
+      if (!storage || !storage.isLoggedIn()) {
+        loading.style.display = 'none';
         empty.style.display = 'block';
-        clearBtn.style.display = 'none';
+        empty.innerHTML = `
+          <div class="empty-fav-icon">🔒</div>
+          <h2>Faça login para ver seus favoritos</h2>
+          <p>Entre na sua conta para gerenciar seus produtos favoritos</p>
+          <a href="login.html" class="btn primary">Fazer Login</a>
+        `;
         return;
       }
 
-      grid.style.display = 'grid';
-      empty.style.display = 'none';
-      clearBtn.style.display = 'block';
+      try {
+        const user = storage.getUser();
+        console.log('🔗 Buscando favoritos do usuário:', user.id);
 
-      // Pega produtos favoritos
-      const produtosFavoritos = produtosDB.filter(p => favorites.includes(p.id));
+        const response = await fetch(`${API_BASE}/favoritos/listar.php?usuario_id=${user.id}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-      grid.innerHTML = produtosFavoritos.map(p => `
+        const data = await response.json();
+        console.log('📦 Favoritos recebidos:', data);
+
+        if (data.success && data.data && data.data.length > 0) {
+          // Buscar detalhes dos produtos
+          const produtosPromises = data.data.map(fav => 
+            fetch(`${API_BASE}/produtos/detalhes.php?id=${fav.produto_id}`)
+              .then(r => r.json())
+              .then(d => d.success ? d.data : null)
+          );
+
+          favoriteProducts = (await Promise.all(produtosPromises)).filter(p => p !== null);
+          
+          renderizarFavoritos();
+          
+          loading.style.display = 'none';
+          grid.style.display = 'grid';
+          clearBtn.style.display = 'block';
+        } else {
+          loading.style.display = 'none';
+          empty.style.display = 'block';
+          clearBtn.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('❌ Erro ao carregar favoritos:', error);
+        loading.innerHTML = `
+          <div style="text-align:center;color:#ff3b30;">
+            <div style="font-size:4rem;margin-bottom:20px;">❌</div>
+            <h3>Erro ao carregar favoritos</h3>
+            <p style="color:#888;margin:15px 0;">${error.message}</p>
+            <button class="btn primary" onclick="location.reload()" style="padding:12px 24px;margin-top:20px;">
+              Tentar Novamente
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    function renderizarFavoritos() {
+      const grid = document.getElementById('favoritesGrid');
+      const countEl = document.getElementById('favCount');
+
+      countEl.textContent = `${favoriteProducts.length} ${favoriteProducts.length === 1 ? 'item' : 'itens'}`;
+
+      grid.innerHTML = favoriteProducts.map(p => `
         <div class="fav-item">
           <div class="fav-img-wrapper" onclick="location.href='produto.html?id=${p.id}'">
-            <img src="${p.img}" alt="${p.name}" loading="lazy">
+            <img src="${p.imagem_principal}" alt="${p.nome}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x400/14d0d6/000?text=${encodeURIComponent(p.nome)}'">
             <button class="remove-fav" onclick="event.stopPropagation();removeFavorite(${p.id})" title="Remover dos favoritos">
               ×
             </button>
-            <button class="add-to-cart-btn" onclick="event.stopPropagation();addToCartFromFav(${p.id})">
-              🛒 Adicionar ao Carrinho
-            </button>
           </div>
           <div class="fav-info">
-            <div class="fav-name">${p.name}</div>
-            <div class="fav-price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+            <div class="fav-name">${p.nome}</div>
+            <div class="fav-price">R$ ${parseFloat(p.preco).toFixed(2).replace('.',',')}</div>
           </div>
         </div>
       `).join('');
     }
 
-    // Remover favorito
-    function removeFavorite(id) {
-      favorites = favorites.filter(f => f !== id);
-      localStorage.setItem('favorites', JSON.stringify(favorites));
-      renderFavorites();
-      showToast('Removido dos favoritos');
+    // ==========================================
+    // REMOVER FAVORITO
+    // ==========================================
+    async function removeFavorite(id) {
+      if (!storage || !storage.isLoggedIn()) return;
+
+      try {
+        const user = storage.getUser();
+        
+        const response = await fetch(`${API_BASE}/favoritos/remover.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            usuario_id: user.id,
+            produto_id: id
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          await carregarFavoritos();
+          
+          if (storage.showToast) {
+            storage.showToast('Removido dos favoritos', 'info');
+          }
+        } else {
+          if (storage.showToast) {
+            storage.showToast(data.message, 'error');
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao remover favorito:', error);
+        if (storage.showToast) {
+          storage.showToast('Erro ao remover favorito', 'error');
+        }
+      }
     }
 
-    // Limpar todos
-    document.getElementById('clearAllBtn').addEventListener('click', () => {
-      if (confirm('Deseja realmente remover todos os favoritos?')) {
-        favorites = [];
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        renderFavorites();
-        showToast('Todos os favoritos foram removidos');
+    // ==========================================
+    // LIMPAR TODOS
+    // ==========================================
+    document.getElementById('clearAllBtn').addEventListener('click', async () => {
+      if (!confirm('Deseja realmente remover todos os favoritos?')) return;
+
+      if (!storage || !storage.isLoggedIn()) return;
+
+      try {
+        const user = storage.getUser();
+        
+        // Remover todos
+        const removePromises = favoriteProducts.map(p => 
+          fetch(`${API_BASE}/favoritos/remover.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              usuario_id: user.id,
+              produto_id: p.id
+            })
+          })
+        );
+
+        await Promise.all(removePromises);
+        
+        await carregarFavoritos();
+        
+        if (storage.showToast) {
+          storage.showToast('Todos os favoritos foram removidos', 'success');
+        }
+      } catch (error) {
+        console.error('Erro ao limpar favoritos:', error);
+        if (storage.showToast) {
+          storage.showToast('Erro ao limpar favoritos', 'error');
+        }
       }
     });
 
-    // Adicionar ao carrinho
-    function addToCartFromFav(id) {
-      const produto = produtosDB.find(p => p.id === id);
-      if (!produto) return;
-
-      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      const exists = cart.find(item => item.id === id);
-
-      if (exists) {
-        exists.qty++;
-      } else {
-        cart.push({ id: produto.id, name: produto.name, price: produto.price, img: produto.img, qty: 1 });
-      }
-
-      localStorage.setItem('cart', JSON.stringify(cart));
-      
-      // Atualiza contador
-      if (typeof updateCartCount === 'function') {
-        updateCartCount();
-      }
-
-      showToast('✓ Adicionado ao carrinho!');
-    }
-
-    // Toast notification
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
-    }
-
-    // Atualizar contador do carrinho
-    function updateCartCount() {
-      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      const count = cart.reduce((sum, i) => sum + (i.qty || 1), 0);
-      document.querySelectorAll('.cart-count').forEach(el => {
-        el.textContent = count;
-      });
-    }
-
-    // Inicialização
-    document.addEventListener('DOMContentLoaded', () => {
-      renderFavorites();
-      updateCartCount();
-    });
-
-    // Expor funções globalmente
+    // Expor globalmente
     window.removeFavorite = removeFavorite;
-    window.addToCartFromFav = addToCartFromFav;
   </script>
-  <script src="js/storage.js"></script>       <!-- 1º - BASE -->
-<script src="js/auth.js"></script>          <!-- 2º - Login -->
-<script src="js/animations.js"></script>    <!-- 3º - Animações -->
-<script src="js/cart.js"></script>          <!-- 4º - Carrinho -->
-<script src="js/app.js"></script>           <!-- 5º - Funcionalidades gerais -->
 </body>
 </html>
