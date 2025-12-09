@@ -1,0 +1,16 @@
+// Teste 1: Verificar se produtos existem no banco
+fetch('http://localhost/Novamoda/api/produtos/listar.php')
+  .then(r => r.json())
+  .then(data => {
+    console.log('📦 PRODUTOS NO BANCO:', data);
+    if (data.success && data.data.length > 0) {
+      console.log('✅ Produtos encontrados:', data.data.length);
+    } else {
+      console.log('❌ Nenhum produto no banco');
+    }
+  })
+  .catch(err => console.error('❌ Erro:', err));
+
+// Teste 2: Verificar adminAPI
+console.log('AdminAPI existe?', typeof window.adminAPI);
+console.log('Função renderizar existe?', typeof window.adminAPI?.renderProdutosAdmin);

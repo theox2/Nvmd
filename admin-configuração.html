@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações - NovaModa Admin</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { display: flex; margin: 0; background: #0a0a0a; font-family: 'Inter', sans-serif; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: #111;
+      height: 100vh;
+      position: fixed;
+      border-right: 1px solid #222;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .sidebar .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #14d0d6;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #222;
+    }
+
+    .menu-item {
+      padding: 12px 16px;
+      margin: 8px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #aaa;
+      text-decoration: none;
+    }
+
+    .menu-item:hover, .menu-item.active {
+      background: rgba(20, 208, 214, 0.1);
+      color: #14d0d6;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+      height: 100vh;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 { font-size: 2rem; margin: 0; color: #fff; }
+
+    /* Settings Sections */
+    .settings-grid {
+      display: grid;
+      gap: 25px;
+    }
+
+    .settings-card {
+      background: #111;
+      border-radius: 12px;
+      padding: 30px;
+      border: 1px solid #222;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #222;
+    }
+
+    .card-icon {
+      font-size: 2rem;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0;
+      color: #fff;
+    }
+
+    .card-desc {
+      color: #888;
+      font-size: 14px;
+      margin: 5px 0 0 0;
+    }
+
+    /* Form Elements */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      font-size: 14px;
+      color: #888;
+      font-weight: 600;
+    }
+
+    .form-input, .form-select {
+      padding: 12px;
+      background: #0b0b0b;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 15px;
+      font-family: inherit;
+    }
+
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: #14d0d6;
+    }
+
+    /* Toggle Switch */
+    .toggle-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #222;
+    }
+
+    .toggle-group:last-child {
+      border-bottom: none;
+    }
+
+    .toggle-info {
+      flex: 1;
+    }
+
+    .toggle-title {
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .toggle-desc {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 26px;
+      cursor: pointer;
+    }
+
+    .toggle-switch input {
+      display: none;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #333;
+      border-radius: 13px;
+      transition: 0.3s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 3px;
+      bottom: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background: #14d0d6;
+    }
+
+    .toggle-switch input:checked + .toggle-slider::before {
+      transform: translateX(24px);
+    }
+
+    /* Color Picker */
+    .color-group {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .color-preview {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      border: 2px solid #333;
+      cursor: pointer;
+    }
+
+    .color-input {
+      flex: 1;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s;
+      font-size: 15px;
+    }
+
+    .btn-primary {
+      background: #14d0d6;
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(20, 208, 214, 0.4);
+    }
+
+    .btn-secondary {
+      background: #222;
+      color: #aaa;
+    }
+
+    .btn-danger {
+      background: rgba(255, 59, 48, 0.2);
+      color: #ff3b30;
+      border: 1px solid #ff3b30;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+      padding-top: 25px;
+      border-top: 1px solid #222;
+    }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-box {
+      background: #0b0b0b;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #222;
+    }
+
+    .stat-label {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #14d0d6;
+    }
+
+    /* Success Message */
+    .success-message {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #14d0d6;
+      color: #000;
+      padding: 16px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      z-index: 9999;
+      display: none;
+      animation: slideIn 0.3s ease;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @media(max-width: 968px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; }
+      .form-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">⚙️ NovaModa Admin</div>
+    <a href="admin.html" class="menu-item">
+      <span>📊</span> Dashboard
+    </a>
+    <a href="admin-pedidos.html" class="menu-item">
+      <span>📦</span> Pedidos
+    </a>
+    <a href="admin-produtos.html" class="menu-item">
+      <span>👕</span> Produtos
+    </a>
+    <a href="admin-clientes.html" class="menu-item">
+      <span>👥</span> Clientes
+    </a>
+    <a href="admin-relatorios.html" class="menu-item">
+      <span>📈</span> Relatórios
+    </a>
+    <a href="admin-configuracoes.html" class="menu-item active">
+      <span>⚙️</span> Configurações
+    </a>
+    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #222;">
+      <a href="index.html" class="menu-item">
+        <span>🏠</span> Voltar ao Site
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="header">
+      <h1>⚙️ Configurações do Sistema</h1>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-label">Uptime</div>
+        <div class="stat-value" id="uptime">99.9%</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Armazenamento</div>
+        <div class="stat-value" id="storage">45%</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Última Atualização</div>
+        <div class="stat-value" style="font-size: 1.2rem;" id="lastUpdate">Hoje</div>
+      </div>
+    </div>
+
+    <div class="settings-grid">
+      <!-- Informações da Loja -->
+      <div class="settings-card">
+        <div class="card-header">
+          <span class="card-icon">🏪</span>
+          <div>
+            <h2 class="card-title">Informações da Loja</h2>
+            <p class="card-desc">Configure dados básicos da sua loja</p>
+          </div>
+        </div>
+
+        <form id="storeForm">
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Nome da Loja</label>
+              <input type="text" class="form-input" id="storeName" value="NovaModa">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email de Contato</label>
+              <input type="email" class="form-input" id="storeEmail" value="contato@novamoda.com">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Telefone</label>
+              <input type="tel" class="form-input" id="storePhone" value="(11) 99999-9999">
+            </div>
+
+            <div class="form-group full">
+              <label class="form-label">Endereço</label>
+              <input type="text" class="form-input" id="storeAddress" value="Rua das Flores, 123 - São Paulo, SP">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">CNPJ</label>
+              <input type="text" class="form-input" id="storeCNPJ" value="00.000.000/0000-00">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Moeda</label>
+              <select class="form-select" id="storeCurrency">
+                <option value="BRL">Real (R$)</option>
+                <option value="USD">Dólar ($)</option>
+                <option value="EUR">Euro (€)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            <button type="button" class="btn btn-secondary" onclick="location.reload()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Configurações de E-mail -->
+      <div class="settings-card">
+        <div class="card-header">
+          <span class="card-icon">📧</span>
+          <div>
+            <h2 class="card-title">Notificações por Email</h2>
+            <p class="card-desc">Configure quando e como receber notificações</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="toggle-group">
+            <div class="toggle-info">
+              <div class="toggle-title">Novos Pedidos</div>
+              <div class="toggle-desc">Receber email quando um novo pedido for realizado</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="emailNewOrders" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-info">
+              <div class="toggle-title">Estoque Baixo</div>
+              <div class="toggle-desc">Alertas quando produtos atingirem estoque mínimo</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="emailLowStock" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-info">
+              <div class="toggle-title">Novos Clientes</div>
+              <div class="toggle-desc">Notificar sobre novos cadastros</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="emailNewCustomers">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-info">
+              <div class="toggle-title">Relatórios Semanais</div>
+              <div class="toggle-desc">Receber resumo de vendas toda segunda-feira</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="emailWeeklyReport" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="saveEmailSettings()">Salvar Preferências</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aparência -->
+      <div class="settings-card">
+        <div class="card-header">
+          <span class="card-icon">🎨</span>
+          <div>
+            <h2 class="card-title">Aparência do Site</h2>
+            <p class="card-desc">Personalize cores e estilo da loja</p>
+          </div>
+        </div>
+
+        <form id="appearanceForm">
+          <div class="form-group">
+            <label class="form-label">Cor Primária</label>
+            <div class="color-group">
+              <input type="color" id="primaryColor" value="#14d0d6" class="color-preview">
+              <input type="text" class="form-input color-input" value="#14d0d6" readonly>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Cor de Fundo</label>
+            <div class="color-group">
+              <input type="color" id="bgColor" value="#0b0b0b" class="color-preview">
+              <input type="text" class="form-input color-input" value="#0b0b0b" readonly>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Estilo de Fonte</label>
+            <select class="form-select" id="fontStyle">
+              <option value="Inter">Inter (Padrão)</option>
+              <option value="Roboto">Roboto</option>
+              <option value="Poppins">Poppins</option>
+              <option value="Montserrat">Montserrat</option>
+            </select>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary">Aplicar Tema</button>
+            <button type="button" class="btn btn-secondary" onclick="resetTheme()">Restaurar Padrão</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Pagamentos -->
+      <div class="settings-card">
+        <div class="card-header">
+          <span class="card-icon">💳</span>
+          <div>
+            <h2 class="card-title">Formas de Pagamento</h2>
+            <p class="card-desc">Ative ou desative métodos de pagamento</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="toggle-group">
+            <div class="toggle-info">
+              <div class="toggle-title">PIX</div>
+              <div class="toggle-desc">Pagamento instantâneo via PIX</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="paymentPix" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-info">
+              <div class="toggle-title">Cartão de Crédito</div>
+              <div class="toggle-desc">Parcelamento em até 12x</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="paymentCredit" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-info">
+              <div class="toggle-title">Boleto Bancário</div>
+              <div class="toggle-desc">Vencimento em 3 dias úteis</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="paymentBoleto" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="form-group" style="margin-top: 20px;">
+            <label class="form-label">Número Máximo de Parcelas</label>
+            <select class="form-select" id="maxInstallments">
+              <option value="1">1x (à vista)</option>
+              <option value="3">3x sem juros</option>
+              <option value="6" selected>6x sem juros</option>
+              <option value="12">12x sem juros</option>
+            </select>
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="savePaymentSettings()">Salvar Configurações</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Frete -->
+      <div class="settings-card">
+        <div class="card-header">
+          <span class="card-icon">🚚</span>
+          <div>
+            <h2 class="card-title">Configurações de Frete</h2>
+            <p class="card-desc">Defina regras de entrega</p>
+          </div>
+        </div>
+
+        <form id="shippingForm">
+          <div class="form-group">
+            <label class="form-label">Frete Grátis Acima de</label>
+            <input type="number" class="form-input" id="freeShippingMin" value="199" step="10">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Prazo de Entrega (dias úteis)</label>
+            <select class="form-select" id="deliveryTime">
+              <option value="3-5">3 a 5 dias</option>
+              <option value="5-7" selected>5 a 7 dias</option>
+              <option value="7-10">7 a 10 dias</option>
+              <option value="10-15">10 a 15 dias</option>
+            </select>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-info">
+              <div class="toggle-title">Rastreamento Ativo</div>
+              <div class="toggle-desc">Permitir que clientes acompanhem pedidos</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="trackingEnabled" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary">Salvar Frete</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Zona de Perigo -->
+      <div class="settings-card" style="border-color: #ff3b30;">
+        <div class="card-header">
+          <span class="card-icon">⚠️</span>
+          <div>
+            <h2 class="card-title" style="color: #ff3b30;">Zona de Perigo</h2>
+            <p class="card-desc">Ações irreversíveis - use com cuidado</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="form-group">
+            <label class="form-label">Limpar Dados</label>
+            <button class="btn btn-danger" onclick="clearOrders()" style="width: 100%;">
+              Limpar Todos os Pedidos
+            </button>
+          </div>
+
+          <div class="form-group">
+            <button class="btn btn-danger" onclick="clearProducts()" style="width: 100%;">
+              Limpar Todos os Produtos
+            </button>
+          </div>
+
+          <div class="form-group">
+            <button class="btn btn-danger" onclick="clearAllData()" style="width: 100%;">
+              ⚠️ Resetar Sistema Completo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Message -->
+  <div class="success-message" id="successMessage">
+    ✓ Configurações salvas com sucesso!
+  </div>
+<script src="js/admin.js"></script> 
+  <script>
+    // Salvar informações da loja
+    document.getElementById('storeForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const storeData = {
+        name: document.getElementById('storeName').value,
+        email: document.getElementById('storeEmail').value,
+        phone: document.getElementById('storePhone').value,
+        address: document.getElementById('storeAddress').value,
+        cnpj: document.getElementById('storeCNPJ').value,
+        currency: document.getElementById('storeCurrency').value
+      };
+
+      localStorage.setItem('store_config', JSON.stringify(storeData));
+      showSuccess();
+    });
+
+    // Salvar configurações de email
+    function saveEmailSettings() {
+      const emailConfig = {
+        newOrders: document.getElementById('emailNewOrders').checked,
+        lowStock: document.getElementById('emailLowStock').checked,
+        newCustomers: document.getElementById('emailNewCustomers').checked,
+        weeklyReport: document.getElementById('emailWeeklyReport').checked
+      };
+
+      localStorage.setItem('email_config', JSON.stringify(emailConfig));
+      showSuccess();
+    }
+
+    // Salvar aparência
+    document.getElementById('appearanceForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const themeConfig = {
+        primaryColor: document.getElementById('primaryColor').value,
+        bgColor: document.getElementById('bgColor').value,
+        font: document.getElementById('fontStyle').value
+      };
+
+      localStorage.setItem('theme_config', JSON.stringify(themeConfig));
+      showSuccess();
+      
+      // Aplicar tema imediatamente (opcional)
+      document.documentElement.style.setProperty('--accent', themeConfig.primaryColor);
+    });
+
+    // Resetar tema
+    function resetTheme() {
+      if (confirm('Restaurar tema padrão?')) {
+        localStorage.removeItem('theme_config');
+        document.getElementById('primaryColor').value = '#14d0d6';
+        document.getElementById('bgColor').value = '#0b0b0b';
+        document.getElementById('fontStyle').value = 'Inter';
+        showSuccess();
+      }
+    }
+
+    // Salvar pagamentos
+    function savePaymentSettings() {
+      const paymentConfig = {
+        pix: document.getElementById('paymentPix').checked,
+        credit: document.getElementById('paymentCredit').checked,
+        boleto: document.getElementById('paymentBoleto').checked,
+        maxInstallments: document.getElementById('maxInstallments').value
+      };
+
+      localStorage.setItem('payment_config', JSON.stringify(paymentConfig));
+      showSuccess();
+    }
+
+    // Salvar frete
+    document.getElementById('shippingForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const shippingConfig = {
+        freeShippingMin: document.getElementById('freeShippingMin').value,
+        deliveryTime: document.getElementById('deliveryTime').value,
+        tracking: document.getElementById('trackingEnabled').checked
+      };
+
+      localStorage.setItem('shipping_config', JSON.stringify(shippingConfig));
+      showSuccess();
+    });
+
+    // Limpar pedidos
+    function clearOrders() {
+      if (confirm('⚠️ ATENÇÃO: Isso vai apagar TODOS os pedidos permanentemente. Confirmar?')) {
+        localStorage.removeItem('orders');
+        alert('Todos os pedidos foram removidos.');
+        location.reload();
+      }
+    }
+
+    // Limpar produtos
+    function clearProducts() {
+      if (confirm('⚠️ ATENÇÃO: Isso vai apagar TODOS os produtos permanentemente. Confirmar?')) {
+        localStorage.removeItem('admin_products');
+        alert('Todos os produtos foram removidos.');
+        location.reload();
+      }
+    }
+
+    // Resetar sistema completo
+    function clearAllData() {
+      const confirmText = 'RESETAR';
+      const input = prompt(`⚠️ PERIGO: Isso vai apagar TODO o sistema!\n\nDigite "${confirmText}" para confirmar:`);
+      
+      if (input === confirmText) {
+        localStorage.clear();
+        alert('Sistema resetado completamente. Redirecionando...');
+        setTimeout(() => {
+          location.href = 'admin.html';
+        }, 1000);
+      }
+    }
+
+    // Mostrar mensagem de sucesso
+    function showSuccess() {
+      const msg = document.getElementById('successMessage');
+      msg.classList.add('show');
+      setTimeout(() => {
+        msg.classList.remove('show');
+      }, 3000);
+    }
+
+    // Carregar configurações salvas
+    function loadSettings() {
+      // Carregar loja
+      const storeConfig = JSON.parse(localStorage.getItem('store_config') || '{}');
+      if (storeConfig.name) {
+        document.getElementById('storeName').value = storeConfig.name;
+        document.getElementById('storeEmail').value = storeConfig.email;
+        document.getElementById('storePhone').value = storeConfig.phone;
+        document.getElementById('storeAddress').value = storeConfig.address;
+        document.getElementById('storeCNPJ').value = storeConfig.cnpj;
+        document.getElementById('storeCurrency').value = storeConfig.currency;
+      }
+
+      // Carregar email
+      const emailConfig = JSON.parse(localStorage.getItem('email_config') || '{}');
+      if (Object.keys(emailConfig).length) {
+        document.getElementById('emailNewOrders').checked = emailConfig.newOrders;
+        document.getElementById('emailLowStock').checked = emailConfig.lowStock;
+        document.getElementById('emailNewCustomers').checked = emailConfig.newCustomers;
+        document.getElementById('emailWeeklyReport').checked = emailConfig.weeklyReport;
+      }
+
+      // Carregar tema
+      const themeConfig = JSON.parse(localStorage.getItem('theme_config') || '{}');
+      if (themeConfig.primaryColor) {
+        document.getElementById('primaryColor').value = themeConfig.primaryColor;
+        document.getElementById('bgColor').value = themeConfig.bgColor;
+        document.getElementById('fontStyle').value = themeConfig.font;
+      }
+
+      // Atualizar stats
+      updateStats();
+    }
+
+    // Atualizar estatísticas
+    function updateStats() {
+      const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+      const products = JSON.parse(localStorage.getItem('admin_products') || '[]');
+    }
+
+    

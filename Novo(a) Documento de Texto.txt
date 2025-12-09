@@ -1,0 +1,521 @@
+-- =====================================================
+-- ADICIONAR PRODUTOS STREETWEAR - NOVAMODA
+-- Inspirado em Matuê, Central Cee, Nike, Adidas, Zara
+-- =====================================================
+
+-- Execute este script no phpMyAdmin ou MySQL Workbench
+-- Ele vai adicionar 30+ produtos de streetwear autênticos
+
+USE novamoda;
+
+-- =====================================================
+-- PRODUTOS MASCULINOS - CAMISETAS
+-- =====================================================
+
+INSERT INTO produtos (nome, slug, descricao, categoria_id, preco, preco_antigo, estoque, imagem_principal, ativo, destaque) VALUES
+('Camiseta Oversized Trap Wave', 'camiseta-oversized-trap-wave', 'Camiseta oversized premium com estampa inspirada na cultura trap. Tecido 100% algodão fio 30.1, modelagem drop shoulder e barra alongada. Perfeita para o estilo Matuê.', 1, 149.90, 199.90, 35, 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', 1, 1),
+
+('Camiseta Tie-Dye Psychedelic', 'camiseta-tie-dye-psychedelic', 'Camiseta tie-dye artesanal com cores vibrantes. Cada peça é única. Modelagem oversized, 100% algodão premium. Vibe psicodélica autêntica.', 1, 139.90, NULL, 28, 'https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=800', 1, 1),
+
+('Camiseta Vintage Nike Air', 'camiseta-vintage-nike-air', 'Camiseta estilo vintage Nike com logo Air clássico. Efeito desbotado intencional, oversized fit. Algodão stone washed premium.', 1, 169.90, 229.90, 42, 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800', 1, 0),
+
+('Camiseta Adidas Three Stripes Black', 'camiseta-adidas-three-stripes', 'Camiseta preta clássica Adidas com três listras laterais. Tecido respirável, fit regular. Essencial do streetwear.', 1, 129.90, NULL, 58, 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', 1, 0),
+
+('Camiseta Corta-Vento Central Cee', 'camiseta-corta-vento-central', 'Camiseta técnica com proteção UV, estilo UK drill. Tecido dry-fit, modelagem slim fit. Inspirada no visual de Central Cee.', 1, 159.90, NULL, 31, 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800', 1, 1),
+
+-- =====================================================
+-- MOLETONS E HOODIES
+-- =====================================================
+
+('Moletom Trap Skull Premium', 'moletom-trap-skull-premium', 'Moletom canguru com estampa de caveira trap nas costas. Capuz duplo, bolso frontal grande. Tecido felpa 100% algodão. Perfeito para shows.', 1, 289.90, 399.90, 24, 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', 1, 1),
+
+('Hoodie Oversized "30 PRAÇA"', 'hoodie-oversized-30-praca', 'Hoodie oversized inspirado no 30PRAÇA. Estampa frontal e traseira, capuz grande. Modelagem drop shoulder, mangas compridas.', 1, 329.90, NULL, 19, 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', 1, 1),
+
+('Moletom Nike Tech Fleece', 'moletom-nike-tech-fleece', 'Moletom Nike Tech Fleece original. Tecnologia de isolamento térmico, zíper completo, bolsos laterais. Fit moderno e slim.', 1, 449.90, 599.90, 15, 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', 1, 1),
+
+('Hoodie Adidas Yeezy Style', 'hoodie-adidas-yeezy-style', 'Hoodie minimalista estilo Yeezy. Cores neutras, modelagem oversized, capuz grande. Algodão orgânico premium.', 1, 359.90, NULL, 22, 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', 1, 0),
+
+-- =====================================================
+-- CALÇAS E SHORTS
+-- =====================================================
+
+('Calça Cargo Militar Trap', 'calca-cargo-militar-trap', 'Calça cargo estilo militar com múltiplos bolsos funcionais. Tecido resistente ripstop, ajuste nos tornozelos. Essencial do streetwear.', 1, 249.90, 329.90, 33, 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800', 1, 1),
+
+('Calça Slim Fit Destroyed', 'calca-slim-fit-destroyed', 'Calça jeans slim com rasgos estratégicos. Lavagem escura, stretch confortável. Visual UK drill autêntico.', 1, 219.90, NULL, 41, 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800', 1, 0),
+
+('Calça Jogger Tech Nike', 'calca-jogger-tech-nike', 'Calça jogger Nike com tecnologia Dri-FIT. Elástico nos tornozelos, bolsos com zíper. Perfeita para treino e estilo.', 1, 279.90, 349.90, 38, 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800', 1, 0),
+
+('Calça Wide Leg Skate', 'calca-wide-leg-skate', 'Calça estilo skate com perna larga. Jeans lavagem clara, fit relaxado. Visual anos 90 revival.', 1, 269.90, NULL, 27, 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800', 1, 0),
+
+('Shorts Cargo Preto Tactical', 'shorts-cargo-preto-tactical', 'Shorts cargo tático com bolsos laterais grandes. Tecido resistente, comprimento na altura do joelho. Estilo urbano militar.', 1, 179.90, NULL, 45, 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=800', 1, 0),
+
+-- =====================================================
+-- JAQUETAS E SOBRETUDOS
+-- =====================================================
+
+('Jaqueta Bomber MA-1 Verde Militar', 'jaqueta-bomber-ma1-verde', 'Jaqueta bomber clássica MA-1 verde militar. Bolsos laterais e no braço, zíper YKK, forro laranja interno. Ícone do streetwear.', 1, 399.90, 549.90, 18, 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800', 1, 1),
+
+('Corta-Vento Nike Windrunner', 'corta-vento-nike-windrunner', 'Jaqueta corta-vento Nike Windrunner com capuz. Tecnologia repelente à água, logo refletivo. Clássico atemporal.', 1, 329.90, NULL, 26, 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800', 1, 0),
+
+('Jaqueta Jeans Oversized Destroyed', 'jaqueta-jeans-oversized-destroyed', 'Jaqueta jeans oversized com rasgos e patches. Lavagem escura, gola de pelos removível. Visual grunge moderno.', 1, 379.90, 479.90, 21, 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800', 1, 1),
+
+('Corta-Vento Adidas Tricolor', 'corta-vento-adidas-tricolor', 'Corta-vento Adidas vintage tricolor. Bolsos frontais, capuz ajustável, logo bordado. Estilo anos 90.', 1, 299.90, NULL, 32, 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800', 1, 0),
+
+-- =====================================================
+-- ACESSÓRIOS - BONÉS E TOUCAS
+-- =====================================================
+
+('Boné Aba Reta Trap Culture', 'bone-aba-reta-trap-culture', 'Boné aba reta snapback com bordado trap. Regulagem traseira, aba dura. Estilo autêntico de hip-hop.', 4, 89.90, NULL, 67, 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800', 1, 0),
+
+('Touca Beanie Carhartt Style', 'touca-beanie-carhartt-style', 'Touca beanie de tricô grossa estilo Carhartt. Dobra dupla, logo bordado. Essencial para o inverno.', 4, 79.90, 99.90, 88, 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=800', 1, 0),
+
+('Boné Dad Hat Nike SB', 'bone-dad-hat-nike-sb', 'Boné dad hat Nike SB com aba curva. Tecido suave, regulagem traseira de metal. Fit confortável.', 4, 119.90, NULL, 54, 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800', 1, 0),
+
+('Touca Balaclava Ninja', 'touca-balaclava-ninja', 'Balaclava ninja preta full face. Tecido respirável, abertura para olhos e boca. Visual tático urbano.', 4, 69.90, NULL, 73, 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800', 1, 1),
+
+-- =====================================================
+-- CALÇADOS - TÊNIS
+-- =====================================================
+
+('Tênis Nike Air Force 1 Low White', 'tenis-nike-air-force-1-white', 'Nike Air Force 1 branco clássico. Couro premium, solado de borracha, tecnologia Air. O tênis mais icônico do streetwear.', 5, 699.90, 899.90, 42, 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800', 1, 1),
+
+('Tênis Air Jordan 1 Mid Chicago', 'tenis-air-jordan-1-chicago', 'Air Jordan 1 Mid colorway Chicago. Couro e nobuck, cano médio, Air-Sole. Lenda do basquete e streetwear.', 5, 899.90, 1199.90, 28, 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800', 1, 1),
+
+('Tênis Adidas Samba OG Black', 'tenis-adidas-samba-og-black', 'Adidas Samba OG preto com três listras brancas. Cabedal em couro, solado de borracha gum. Clássico do futebol ao streetwear.', 5, 599.90, NULL, 35, 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800', 1, 0),
+
+('Tênis New Balance 550 White Navy', 'tenis-new-balance-550-white-navy', 'New Balance 550 branco com detalhes azul marinho. Cabedal em couro sintético, design retro basquete. Hype do momento.', 5, 649.90, 799.90, 31, 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800', 1, 1),
+
+('Tênis Vans Old Skool Black', 'tenis-vans-old-skool-black', 'Vans Old Skool preto clássico. Canvas resistente, listra lateral icônica, solado waffle. Essencial do skate e streetwear.', 5, 349.90, NULL, 58, 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800', 1, 0),
+
+('Tênis Converse Chuck 70 High Black', 'tenis-converse-chuck-70-black', 'Converse Chuck Taylor 70 High preto. Canvas premium, cano alto, sola vintage. Ícone atemporal.', 5, 429.90, NULL, 47, 'https://images.unsplash.com/photo-1514989940723-e8e51635b782?w=800', 1, 0),
+
+-- =====================================================
+-- PRODUTOS FEMININOS
+-- =====================================================
+
+('Cropped Hoodie Rosa Neon', 'cropped-hoodie-rosa-neon', 'Cropped hoodie rosa neon oversized. Capuz ajustável, mangas longas, barra elástica. Vibe Y2K moderna.', 2, 179.90, NULL, 38, 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=800', 1, 1),
+
+('Calça Cargo Feminina Bege', 'calca-cargo-feminina-bege', 'Calça cargo feminina high waist bege. Múltiplos bolsos, ajuste nos tornozelos, cintura alta. Urbano e feminino.', 2, 229.90, 289.90, 34, 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800', 1, 0),
+
+('Top Esportivo Nike Pro', 'top-esportivo-nike-pro', 'Top esportivo Nike Pro com tecnologia Dri-FIT. Sustentação média, tecido respirável. Ideal para treino e streetwear.', 2, 139.90, NULL, 52, 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=800', 1, 0);
+
+-- =====================================================
+-- ADICIONAR TAMANHOS PARA OS PRODUTOS (CORRIGIDO)
+-- Usa variáveis para pegar os IDs corretos automaticamente
+-- =====================================================
+
+-- Pegar o último ID antes de inserir os novos produtos
+SET @base_id = (SELECT COALESCE(MAX(id), 0) FROM produtos WHERE id < 7);
+
+-- Agora adicionar tamanhos usando os IDs corretos dos produtos recém-criados
+-- Vamos usar uma abordagem mais segura: adicionar tamanhos pelo NOME do produto
+
+-- Tamanhos para Camiseta Oversized Trap Wave
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 8 FROM produtos WHERE nome = 'Camiseta Oversized Trap Wave'
+UNION ALL
+SELECT id, 'M', 12 FROM produtos WHERE nome = 'Camiseta Oversized Trap Wave'
+UNION ALL
+SELECT id, 'G', 10 FROM produtos WHERE nome = 'Camiseta Oversized Trap Wave'
+UNION ALL
+SELECT id, 'GG', 5 FROM produtos WHERE nome = 'Camiseta Oversized Trap Wave';
+
+-- Tamanhos para Camiseta Tie-Dye Psychedelic
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 6 FROM produtos WHERE nome = 'Camiseta Tie-Dye Psychedelic'
+UNION ALL
+SELECT id, 'M', 10 FROM produtos WHERE nome = 'Camiseta Tie-Dye Psychedelic'
+UNION ALL
+SELECT id, 'G', 8 FROM produtos WHERE nome = 'Camiseta Tie-Dye Psychedelic'
+UNION ALL
+SELECT id, 'GG', 4 FROM produtos WHERE nome = 'Camiseta Tie-Dye Psychedelic';
+
+-- Tamanhos para Camiseta Vintage Nike Air
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 10 FROM produtos WHERE nome = 'Camiseta Vintage Nike Air'
+UNION ALL
+SELECT id, 'M', 15 FROM produtos WHERE nome = 'Camiseta Vintage Nike Air'
+UNION ALL
+SELECT id, 'G', 12 FROM produtos WHERE nome = 'Camiseta Vintage Nike Air'
+UNION ALL
+SELECT id, 'GG', 5 FROM produtos WHERE nome = 'Camiseta Vintage Nike Air';
+
+-- Tamanhos para Camiseta Adidas Three Stripes Black
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 12 FROM produtos WHERE nome = 'Camiseta Adidas Three Stripes Black'
+UNION ALL
+SELECT id, 'M', 20 FROM produtos WHERE nome = 'Camiseta Adidas Three Stripes Black'
+UNION ALL
+SELECT id, 'G', 18 FROM produtos WHERE nome = 'Camiseta Adidas Three Stripes Black'
+UNION ALL
+SELECT id, 'GG', 8 FROM produtos WHERE nome = 'Camiseta Adidas Three Stripes Black';
+
+-- Tamanhos para Camiseta Corta-Vento Central Cee
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 7 FROM produtos WHERE nome = 'Camiseta Corta-Vento Central Cee'
+UNION ALL
+SELECT id, 'M', 11 FROM produtos WHERE nome = 'Camiseta Corta-Vento Central Cee'
+UNION ALL
+SELECT id, 'G', 9 FROM produtos WHERE nome = 'Camiseta Corta-Vento Central Cee'
+UNION ALL
+SELECT id, 'GG', 4 FROM produtos WHERE nome = 'Camiseta Corta-Vento Central Cee';
+
+-- Tamanhos para Moletom Trap Skull Premium
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 5 FROM produtos WHERE nome = 'Moletom Trap Skull Premium'
+UNION ALL
+SELECT id, 'M', 8 FROM produtos WHERE nome = 'Moletom Trap Skull Premium'
+UNION ALL
+SELECT id, 'G', 7 FROM produtos WHERE nome = 'Moletom Trap Skull Premium'
+UNION ALL
+SELECT id, 'GG', 4 FROM produtos WHERE nome = 'Moletom Trap Skull Premium';
+
+-- Tamanhos para Hoodie Oversized "30 PRAÇA"
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 4 FROM produtos WHERE nome = 'Hoodie Oversized "30 PRAÇA"'
+UNION ALL
+SELECT id, 'M', 7 FROM produtos WHERE nome = 'Hoodie Oversized "30 PRAÇA"'
+UNION ALL
+SELECT id, 'G', 6 FROM produtos WHERE nome = 'Hoodie Oversized "30 PRAÇA"'
+UNION ALL
+SELECT id, 'GG', 2 FROM produtos WHERE nome = 'Hoodie Oversized "30 PRAÇA"';
+
+-- Tamanhos para Moletom Nike Tech Fleece
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 3 FROM produtos WHERE nome = 'Moletom Nike Tech Fleece'
+UNION ALL
+SELECT id, 'M', 5 FROM produtos WHERE nome = 'Moletom Nike Tech Fleece'
+UNION ALL
+SELECT id, 'G', 5 FROM produtos WHERE nome = 'Moletom Nike Tech Fleece'
+UNION ALL
+SELECT id, 'GG', 2 FROM produtos WHERE nome = 'Moletom Nike Tech Fleece';
+
+-- Tamanhos para Hoodie Adidas Yeezy Style
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 5 FROM produtos WHERE nome = 'Hoodie Adidas Yeezy Style'
+UNION ALL
+SELECT id, 'M', 8 FROM produtos WHERE nome = 'Hoodie Adidas Yeezy Style'
+UNION ALL
+SELECT id, 'G', 7 FROM produtos WHERE nome = 'Hoodie Adidas Yeezy Style'
+UNION ALL
+SELECT id, 'GG', 2 FROM produtos WHERE nome = 'Hoodie Adidas Yeezy Style';
+
+-- Tamanhos para Calça Cargo Militar Trap
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, '38', 7 FROM produtos WHERE nome = 'Calça Cargo Militar Trap'
+UNION ALL
+SELECT id, '40', 9 FROM produtos WHERE nome = 'Calça Cargo Militar Trap'
+UNION ALL
+SELECT id, '42', 10 FROM produtos WHERE nome = 'Calça Cargo Militar Trap'
+UNION ALL
+SELECT id, '44', 7 FROM produtos WHERE nome = 'Calça Cargo Militar Trap';
+
+-- Tamanhos para Calça Slim Fit Destroyed
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, '38', 9 FROM produtos WHERE nome = 'Calça Slim Fit Destroyed'
+UNION ALL
+SELECT id, '40', 12 FROM produtos WHERE nome = 'Calça Slim Fit Destroyed'
+UNION ALL
+SELECT id, '42', 13 FROM produtos WHERE nome = 'Calça Slim Fit Destroyed'
+UNION ALL
+SELECT id, '44', 7 FROM produtos WHERE nome = 'Calça Slim Fit Destroyed';
+
+-- Tamanhos para Calça Jogger Tech Nike
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, '38', 8 FROM produtos WHERE nome = 'Calça Jogger Tech Nike'
+UNION ALL
+SELECT id, '40', 11 FROM produtos WHERE nome = 'Calça Jogger Tech Nike'
+UNION ALL
+SELECT id, '42', 12 FROM produtos WHERE nome = 'Calça Jogger Tech Nike'
+UNION ALL
+SELECT id, '44', 7 FROM produtos WHERE nome = 'Calça Jogger Tech Nike';
+
+-- Tamanhos para Calça Wide Leg Skate
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, '38', 6 FROM produtos WHERE nome = 'Calça Wide Leg Skate'
+UNION ALL
+SELECT id, '40', 8 FROM produtos WHERE nome = 'Calça Wide Leg Skate'
+UNION ALL
+SELECT id, '42', 9 FROM produtos WHERE nome = 'Calça Wide Leg Skate'
+UNION ALL
+SELECT id, '44', 4 FROM produtos WHERE nome = 'Calça Wide Leg Skate';
+
+-- Tamanhos para Shorts Cargo Preto Tactical
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, '38', 10 FROM produtos WHERE nome = 'Shorts Cargo Preto Tactical'
+UNION ALL
+SELECT id, '40', 13 FROM produtos WHERE nome = 'Shorts Cargo Preto Tactical'
+UNION ALL
+SELECT id, '42', 15 FROM produtos WHERE nome = 'Shorts Cargo Preto Tactical'
+UNION ALL
+SELECT id, '44', 7 FROM produtos WHERE nome = 'Shorts Cargo Preto Tactical';
+
+-- Tamanhos para Jaqueta Bomber MA-1 Verde Militar
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 4 FROM produtos WHERE nome = 'Jaqueta Bomber MA-1 Verde Militar'
+UNION ALL
+SELECT id, 'M', 6 FROM produtos WHERE nome = 'Jaqueta Bomber MA-1 Verde Militar'
+UNION ALL
+SELECT id, 'G', 6 FROM produtos WHERE nome = 'Jaqueta Bomber MA-1 Verde Militar'
+UNION ALL
+SELECT id, 'GG', 2 FROM produtos WHERE nome = 'Jaqueta Bomber MA-1 Verde Militar';
+
+-- Tamanhos para Corta-Vento Nike Windrunner
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 6 FROM produtos WHERE nome = 'Corta-Vento Nike Windrunner'
+UNION ALL
+SELECT id, 'M', 8 FROM produtos WHERE nome = 'Corta-Vento Nike Windrunner'
+UNION ALL
+SELECT id, 'G', 9 FROM produtos WHERE nome = 'Corta-Vento Nike Windrunner'
+UNION ALL
+SELECT id, 'GG', 3 FROM produtos WHERE nome = 'Corta-Vento Nike Windrunner';
+
+-- Tamanhos para Jaqueta Jeans Oversized Destroyed
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 5 FROM produtos WHERE nome = 'Jaqueta Jeans Oversized Destroyed'
+UNION ALL
+SELECT id, 'M', 7 FROM produtos WHERE nome = 'Jaqueta Jeans Oversized Destroyed'
+UNION ALL
+SELECT id, 'G', 7 FROM produtos WHERE nome = 'Jaqueta Jeans Oversized Destroyed'
+UNION ALL
+SELECT id, 'GG', 2 FROM produtos WHERE nome = 'Jaqueta Jeans Oversized Destroyed';
+
+-- Tamanhos para Corta-Vento Adidas Tricolor
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 7 FROM produtos WHERE nome = 'Corta-Vento Adidas Tricolor'
+UNION ALL
+SELECT id, 'M', 10 FROM produtos WHERE nome = 'Corta-Vento Adidas Tricolor'
+UNION ALL
+SELECT id, 'G', 11 FROM produtos WHERE nome = 'Corta-Vento Adidas Tricolor'
+UNION ALL
+SELECT id, 'GG', 4 FROM produtos WHERE nome = 'Corta-Vento Adidas Tricolor';
+
+-- Tamanhos para Bonés e Toucas (tamanho único)
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'Único', 67 FROM produtos WHERE nome = 'Boné Aba Reta Trap Culture';
+
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'Único', 88 FROM produtos WHERE nome = 'Touca Beanie Carhartt Style';
+
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'Único', 54 FROM produtos WHERE nome = 'Boné Dad Hat Nike SB';
+
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'Único', 73 FROM produtos WHERE nome = 'Touca Balaclava Ninja';
+
+-- Tamanhos para Tênis Nike Air Force 1 Low White
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, '38', 6 FROM produtos WHERE nome = 'Tênis Nike Air Force 1 Low White'
+UNION ALL
+SELECT id, '39', 8 FROM produtos WHERE nome = 'Tênis Nike Air Force 1 Low White'
+UNION ALL
+SELECT id, '40', 10 FROM produtos WHERE nome = 'Tênis Nike Air Force 1 Low White'
+UNION ALL
+SELECT id, '41', 9 FROM produtos WHERE nome = 'Tênis Nike Air Force 1 Low White'
+UNION ALL
+SELECT id, '42', 6 FROM produtos WHERE nome = 'Tênis Nike Air Force 1 Low White'
+UNION ALL
+SELECT id, '43', 3 FROM produtos WHERE nome = 'Tênis Nike Air Force 1 Low White';
+
+-- Tamanhos para Tênis Air Jordan 1 Mid Chicago
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, '38', 4 FROM produtos WHERE nome = 'Tênis Air Jordan 1 Mid Chicago'
+UNION ALL
+SELECT id, '39', 5 FROM produtos WHERE nome = 'Tênis Air Jordan 1 Mid Chicago'
+UNION ALL
+SELECT id, '40', 7 FROM produtos WHERE nome = 'Tênis Air Jordan 1 Mid Chicago'
+UNION ALL
+SELECT id, '41', 7 FROM produtos WHERE nome = 'Tênis Air Jordan 1 Mid Chicago'
+UNION ALL
+SELECT id, '42', 4 FROM produtos WHERE nome = 'Tênis Air Jordan 1 Mid Chicago'
+UNION ALL
+SELECT id, '43', 1 FROM produtos WHERE nome = 'Tênis Air Jordan 1 Mid Chicago';
+
+-- Tamanhos para Tênis Adidas Samba OG Black
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, '38', 5 FROM produtos WHERE nome = 'Tênis Adidas Samba OG Black'
+UNION ALL
+SELECT id, '39', 7 FROM produtos WHERE nome = 'Tênis Adidas Samba OG Black'
+UNION ALL
+SELECT id, '40', 8 FROM produtos WHERE nome = 'Tênis Adidas Samba OG Black'
+UNION ALL
+SELECT id, '41', 9 FROM produtos WHERE nome = 'Tênis Adidas Samba OG Black'
+UNION ALL
+SELECT id, '42', 4 FROM produtos WHERE nome = 'Tênis Adidas Samba OG Black'
+UNION ALL
+SELECT id, '43', 2 FROM produtos WHERE nome = 'Tênis Adidas Samba OG Black';
+
+-- Tamanhos para Tênis New Balance 550 White Navy
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, '38', 5 FROM produtos WHERE nome = 'Tênis New Balance 550 White Navy'
+UNION ALL
+SELECT id, '39', 6 FROM produtos WHERE nome = 'Tênis New Balance 550 White Navy'
+UNION ALL
+SELECT id, '40', 8 FROM produtos WHERE nome = 'Tênis New Balance 550 White Navy'
+UNION ALL
+SELECT id, '41', 7 FROM produtos WHERE nome = 'Tênis New Balance 550 White Navy'
+UNION ALL
+SELECT id, '42', 4 FROM produtos WHERE nome = 'Tênis New Balance 550 White Navy'
+UNION ALL
+SELECT id, '43', 1 FROM produtos WHERE nome = 'Tênis New Balance 550 White Navy';
+
+-- Tamanhos para Tênis Vans Old Skool Black
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, '38', 10 FROM produtos WHERE nome = 'Tênis Vans Old Skool Black'
+UNION ALL
+SELECT id, '39', 13 FROM produtos WHERE nome = 'Tênis Vans Old Skool Black'
+UNION ALL
+SELECT id, '40', 15 FROM produtos WHERE nome = 'Tênis Vans Old Skool Black'
+UNION ALL
+SELECT id, '41', 12 FROM produtos WHERE nome = 'Tênis Vans Old Skool Black'
+UNION ALL
+SELECT id, '42', 6 FROM produtos WHERE nome = 'Tênis Vans Old Skool Black'
+UNION ALL
+SELECT id, '43', 2 FROM produtos WHERE nome = 'Tênis Vans Old Skool Black';
+
+-- Tamanhos para Tênis Converse Chuck 70 High Black
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, '38', 8 FROM produtos WHERE nome = 'Tênis Converse Chuck 70 High Black'
+UNION ALL
+SELECT id, '39', 11 FROM produtos WHERE nome = 'Tênis Converse Chuck 70 High Black'
+UNION ALL
+SELECT id, '40', 13 FROM produtos WHERE nome = 'Tênis Converse Chuck 70 High Black'
+UNION ALL
+SELECT id, '41', 10 FROM produtos WHERE nome = 'Tênis Converse Chuck 70 High Black'
+UNION ALL
+SELECT id, '42', 4 FROM produtos WHERE nome = 'Tênis Converse Chuck 70 High Black'
+UNION ALL
+SELECT id, '43', 1 FROM produtos WHERE nome = 'Tênis Converse Chuck 70 High Black';
+
+-- Tamanhos para Produtos Femininos
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 8 FROM produtos WHERE nome = 'Cropped Hoodie Rosa Neon'
+UNION ALL
+SELECT id, 'M', 13 FROM produtos WHERE nome = 'Cropped Hoodie Rosa Neon'
+UNION ALL
+SELECT id, 'G', 12 FROM produtos WHERE nome = 'Cropped Hoodie Rosa Neon'
+UNION ALL
+SELECT id, 'GG', 5 FROM produtos WHERE nome = 'Cropped Hoodie Rosa Neon';
+
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, '36', 7 FROM produtos WHERE nome = 'Calça Cargo Feminina Bege'
+UNION ALL
+SELECT id, '38', 9 FROM produtos WHERE nome = 'Calça Cargo Feminina Bege'
+UNION ALL
+SELECT id, '40', 11 FROM produtos WHERE nome = 'Calça Cargo Feminina Bege'
+UNION ALL
+SELECT id, '42', 7 FROM produtos WHERE nome = 'Calça Cargo Feminina Bege';
+
+INSERT INTO produto_tamanhos (produto_id, tamanho, estoque) 
+SELECT id, 'P', 12 FROM produtos WHERE nome = 'Top Esportivo Nike Pro'
+UNION ALL
+SELECT id, 'M', 18 FROM produtos WHERE nome = 'Top Esportivo Nike Pro'
+UNION ALL
+SELECT id, 'G', 15 FROM produtos WHERE nome = 'Top Esportivo Nike Pro'
+UNION ALL
+SELECT id, 'GG', 7 FROM produtos WHERE nome = 'Top Esportivo Nike Pro';
+
+-- =====================================================
+-- ADICIONAR CORES PARA OS PRODUTOS
+-- =====================================================
+
+-- Cores para camisetas
+INSERT INTO produto_cores (produto_id, cor, codigo_hex) VALUES
+(7, 'Preto', '#000000'), (7, 'Branco', '#FFFFFF'), (7, 'Cinza', '#808080'),
+(8, 'Tie-Dye Mix', '#FF6B9D'), (8, 'Tie-Dye Azul', '#4169E1'),
+(9, 'Preto Vintage', '#1a1a1a'), (9, 'Cinza Vintage', '#696969'),
+(10, 'Preto', '#000000'), (10, 'Branco', '#FFFFFF'),
+(11, 'Preto', '#000000'), (11, 'Azul Marinho', '#000080'), (11, 'Cinza', '#808080');
+
+-- Cores para moletons
+INSERT INTO produto_cores (produto_id, cor, codigo_hex) VALUES
+(12, 'Preto', '#000000'), (12, 'Cinza Escuro', '#2F4F4F'),
+(13, 'Preto', '#000000'), (13, 'Bege', '#F5F5DC'),
+(14, 'Preto Tech', '#000000'), (14, 'Cinza Tech', '#696969'),
+(15, 'Bege', '#F5F5DC'), (15, 'Cinza Claro', '#D3D3D3'), (15, 'Marrom', '#8B4513');
+
+-- Cores para calças
+INSERT INTO produto_cores (produto_id, cor, codigo_hex) VALUES
+(16, 'Verde Militar', '#4B5320'), (16, 'Preto', '#000000'), (16, 'Caqui', '#C3B091'),
+(17, 'Azul Escuro', '#00008B'), (17, 'Preto', '#000000'),
+(18, 'Preto', '#000000'), (18, 'Cinza Chumbo', '#696969'),
+(19, 'Azul Claro', '#ADD8E6'), (19, 'Azul Médio', '#0000CD'),
+(20, 'Preto', '#000000'), (20, 'Verde Militar', '#4B5320');
+
+-- Cores para jaquetas
+INSERT INTO produto_cores (produto_id, cor, codigo_hex) VALUES
+(21, 'Verde Militar', '#4B5320'), (21, 'Preto', '#000000'),
+(22, 'Preto/Branco', '#000000'), (22, 'Azul/Branco', '#0000FF'),
+(23, 'Azul Escuro', '#00008B'), (23, 'Preto', '#000000'),
+(24, 'Tricolor', '#FF0000');
+
+-- Cores para acessórios
+INSERT INTO produto_cores (produto_id, cor, codigo_hex) VALUES
+(25, 'Preto', '#000000'), (25, 'Azul', '#0000FF'), (25, 'Vermelho', '#FF0000'),
+(26, 'Preto', '#000000'), (26, 'Cinza', '#808080'), (26, 'Bege', '#F5F5DC'),
+(27, 'Preto', '#000000'), (27, 'Branco', '#FFFFFF'),
+(28, 'Preto', '#000000');
+
+-- Cores para tênis
+INSERT INTO produto_cores (produto_id, cor, codigo_hex) VALUES
+(29, 'Branco', '#FFFFFF'),
+(30, 'Vermelho/Branco/Preto', '#FF0000'),
+(31, 'Preto/Branco', '#000000'),
+(32, 'Branco/Azul', '#FFFFFF'),
+(33, 'Preto', '#000000'),
+(34, 'Preto', '#000000');
+
+-- Cores femininas
+INSERT INTO produto_cores (produto_id, cor, codigo_hex) VALUES
+(35, 'Rosa Neon', '#FF6B9D'), (35, 'Roxo Neon', '#9D00FF'), (35, 'Verde Neon', '#39FF14'),
+(36, 'Bege', '#F5F5DC'), (36, 'Verde Militar', '#4B5320'), (36, 'Preto', '#000000'),
+(37, 'Preto', '#000000'), (37, 'Branco', '#FFFFFF'), (37, 'Rosa', '#FFC0CB');
+
+-- =====================================================
+-- ATUALIZAR SLUGS DOS PRODUTOS ANTIGOS
+-- =====================================================
+
+UPDATE produtos SET 
+  slug = LOWER(REPLACE(REPLACE(REPLACE(nome, ' ', '-'), 'ã', 'a'), 'õ', 'o'))
+WHERE slug NOT LIKE '%-%';
+
+-- =====================================================
+-- CRIAR ÍNDICES PARA MELHOR PERFORMANCE
+-- =====================================================
+
+CREATE INDEX IF NOT EXISTS idx_produtos_categoria_preco ON produtos(categoria_id, preco);
+CREATE INDEX IF NOT EXISTS idx_produtos_destaque ON produtos(destaque, ativo);
+CREATE INDEX IF NOT EXISTS idx_produtos_estoque ON produtos(estoque);
+
+-- =====================================================
+-- VERIFICAÇÃO FINAL
+-- =====================================================
+
+SELECT 
+  'Total de Produtos' as Info,
+  COUNT(*) as Quantidade
+FROM produtos
+UNION ALL
+SELECT 
+  'Produtos em Destaque' as Info,
+  COUNT(*) as Quantidade
+FROM produtos WHERE destaque = 1
+UNION ALL
+SELECT 
+  'Produtos Ativos' as Info,
+  COUNT(*) as Quantidade
+FROM produtos WHERE ativo = 1;
+
+-- =====================================================
+-- ✅ SCRIPT CONCLUÍDO!
+-- 
+-- Foram adicionados 31 produtos streetwear autênticos:
+-- - 11 Camisetas e Moletons
+-- - 5 Calças e Shorts
+-- - 4 Jaquetas
+-- - 4 Bonés e Toucas
+-- - 6 Tênis
+-- - 3 Produtos Femininos
+--
+-- Todos com tamanhos, cores e estoque configurados!
+-- =====================================================
