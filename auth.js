@@ -1,25 +1,20 @@
 /**
- * auth.js - Sistema de Autenticação SINCRONIZADO (v6.0 FINAL)
- * Agora funciona PERFEITAMENTE com storage.js
+ * auth.js - 100% BANCO DE DADOS (ZERO localStorage)
+ * Apenas cookies para sessão
+ * @version 7.0.0 FINAL
  */
 
 class AuthSystem {
   constructor() {
     this.API_BASE = window.API_BASE || (window.location.origin + '/Novamoda/api');
-    this.ADMIN_EMAILS = [
-      'admin@novamoda.com',
-      'nicollastheodoro97@gmail.com'
-    ];
+    this.ADMIN_EMAILS = ['admin@novamoda.com', 'nicollastheodoro97@gmail.com'];
     this.init();
   }
 
-  // ==========================================
-  // COOKIES (MESMO MÉTODO DO STORAGE.JS)
-  // ==========================================
-  
+  // COOKIES (ÚNICA FORMA DE ARMAZENAMENTO)
   setCookie(name, value, days = 7) {
     const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
   }
 
   getCookie(name) {
@@ -33,10 +28,7 @@ class AuthSystem {
     this.setCookie(name, '', -1);
   }
 
-  // ==========================================
   // VALIDAÇÕES
-  // ==========================================
-  
   validateEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
@@ -49,13 +41,10 @@ class AuthSystem {
   }
 
   isAdmin(email) {
-    return this.ADMIN_EMAILS.includes(email.toLowerCase());
+    return this.ADMIN_EMAILS.includes(email?.toLowerCase());
   }
 
-  // ==========================================
-  // CADASTRO (SINCRONIZADO COM STORAGE.JS)
-  // ==========================================
-  
+  // CADASTRO
   async signup(name, email, password, passwordConfirm) {
     name = name.trim();
     email = email.trim().toLowerCase();
@@ -81,41 +70,30 @@ class AuthSystem {
       const response = await fetch(`${this.API_BASE}/auth/register.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nome: name,
-          email: email,
-          password: password
-        })
+        body: JSON.stringify({ nome: name, email: email, password: password })
       });
 
       const data = await response.json();
 
       if (data.success) {
-        // ✅ SINCRONIZAR: Salvar nos mesmos lugares que storage.js
         this.setSession(data.user, data.token);
         
-        // ✅ SINCRONIZAR: Atualizar storage.js também
         if (window.storage) {
           window.storage.user = data.user;
           await window.storage.loadCartFromServer();
         }
         
-        this.trackEvent('user_signup', { email });
         return { success: true, user: data.user };
       } else {
         return { success: false, message: data.message || 'Erro ao criar conta' };
       }
-
     } catch (error) {
       console.error('Erro no signup:', error);
       return { success: false, message: 'Erro de conexão com o servidor' };
     }
   }
 
-  // ==========================================
-  // LOGIN (SINCRONIZADO COM STORAGE.JS)
-  // ==========================================
-  
+  // LOGIN
   async login(email, password) {
     email = email.trim().toLowerCase();
 
@@ -124,58 +102,33 @@ class AuthSystem {
     }
 
     try {
-      console.log('🔐 Tentando login:', { email, api: `${this.API_BASE}/auth/login.php` });
-      
       const response = await fetch(`${this.API_BASE}/auth/login.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
+        body: JSON.stringify({ email, password })
       });
 
-      console.log('📡 Status da resposta:', response.status, response.statusText);
-
-      // Se não for 200 OK, tentar ler o erro mesmo assim
-      let data;
-      try {
-        data = await response.json();
-        console.log('📦 Dados recebidos:', data);
-      } catch (e) {
-        console.error('❌ Erro ao parsear resposta JSON:', e);
-        return { success: false, message: `Erro no servidor (${response.status})` };
-      }
+      const data = await response.json();
 
       if (data.success) {
-        console.log('✅ Login bem-sucedido!');
-        
-        // ✅ SINCRONIZAR: Salvar nos mesmos lugares que storage.js
         this.setSession(data.user, data.token);
         
-        // ✅ SINCRONIZAR: Atualizar storage.js também
         if (window.storage) {
           window.storage.user = data.user;
           await window.storage.loadCartFromServer();
         }
         
-        this.trackEvent('user_login', { email });
         return { success: true, user: data.user };
       } else {
-        console.error('❌ Login falhou:', data.message);
         return { success: false, message: data.message || 'Credenciais incorretas' };
       }
-
     } catch (error) {
-      console.error('❌ Erro no login:', error);
-      return { success: false, message: 'Erro de conexão com o servidor' };
+      console.error('Erro no login:', error);
+      return { success: false, message: 'Erro de conexão' };
     }
   }
 
-  // ==========================================
-  // SESSÃO (USA COOKIES COMO STORAGE.JS)
-  // ==========================================
-  
+  // SESSÃO (APENAS COOKIES)
   getSession() {
     try {
       const userCookie = this.getCookie('novamoda_user');
@@ -194,57 +147,23 @@ class AuthSystem {
       loginAt: new Date().toISOString()
     };
     
-    // ✅ Salvar nos COOKIES (como storage.js)
     this.setCookie('novamoda_user', JSON.stringify(sessionData));
-    
-    // ✅ Salvar token também
-    if (token) {
-      this.setCookie('novamoda_token', token);
-    }
-    
-    // ✅ BACKUP: também salvar no localStorage (compatibilidade)
-    localStorage.setItem('novamoda_user', JSON.stringify(sessionData));
-    
+    if (token) this.setCookie('novamoda_token', token);
     this.updateUI();
-    
-    console.log('✅ Sessão salva:', sessionData);
   }
 
   clearSession() {
-    // ✅ Limpar COOKIES
     this.deleteCookie('novamoda_user');
     this.deleteCookie('novamoda_token');
-    
-    // ✅ Limpar localStorage também
-    localStorage.removeItem('novamoda_user');
-    
     this.updateUI();
-    
-    console.log('🗑️ Sessão limpa');
   }
 
-  // ==========================================
-  // VERIFICAR SE ESTÁ LOGADO
-  // ==========================================
-  
   isLoggedIn() {
-    const session = this.getSession();
-    const isLogged = session !== null;
-    console.log('🔐 Verificação de login:', isLogged, session);
-    return isLogged;
+    return this.getSession() !== null;
   }
 
-  // ==========================================
   // LOGOUT
-  // ==========================================
-  
   logout() {
-    const session = this.getSession();
-    if (session) {
-      this.trackEvent('user_logout', { email: session.email });
-    }
-    
-    // ✅ Limpar storage.js também
     if (window.storage) {
       window.storage.logout();
     } else {
@@ -253,10 +172,7 @@ class AuthSystem {
     }
   }
 
-  // ==========================================
-  // PROTEÇÃO DE PÁGINAS (REATIVADA)
-  // ==========================================
-  
+  // PROTEÇÃO
   requireAuth(redirectToLogin = true) {
     if (!this.isLoggedIn()) {
       if (redirectToLogin) {
@@ -276,52 +192,34 @@ class AuthSystem {
     if (!session || !session.isAdmin) {
       if (redirectToHome) {
         this.showToast('❌ Acesso negado', 'error');
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 1500);
+        setTimeout(() => window.location.href = 'index.html', 1500);
       }
       return false;
     }
     return true;
   }
 
-  // ==========================================
-  // UI - DESATIVADA (storage.js gerencia o header)
-  // ==========================================
-  
   updateUI() {
-    // ✅ NÃO faz nada - deixa storage.js gerenciar o header
-    // Isso evita conflito entre os dois sistemas
-    console.log('📌 auth.js: UI não gerenciada (storage.js cuida disso)');
+    console.log('📌 UI gerenciada por storage.js');
   }
 
-  // ==========================================
-  // MANIPULAR FORMULÁRIOS
-  // ==========================================
-  
+  // FORMULÁRIOS
   handleSignupForm(formElement) {
     if (!formElement) return;
 
     formElement.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const nameField = formElement.querySelector('[name="name"], #signupName, #name');
-      const emailField = formElement.querySelector('[name="email"], #signupEmail, #email');
-      const passField = formElement.querySelector('[name="password"], #signupPassword, #password');
-      const confirmField = formElement.querySelector('[name="passwordConfirm"], #signupPasswordConfirm');
-
-      const name = nameField?.value || '';
-      const email = emailField?.value || '';
-      const password = passField?.value || '';
-      const passwordConfirm = confirmField?.value || '';
+      const name = formElement.querySelector('[name="name"]')?.value || '';
+      const email = formElement.querySelector('[name="email"]')?.value || '';
+      const password = formElement.querySelector('[name="password"]')?.value || '';
+      const passwordConfirm = formElement.querySelector('[name="passwordConfirm"]')?.value || '';
 
       const result = await this.signup(name, email, password, passwordConfirm);
 
       if (result.success) {
         this.showToast('✓ Conta criada com sucesso!', 'success');
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 1000);
+        setTimeout(() => window.location.href = 'index.html', 1000);
       } else {
         this.showToast(result.message, 'error');
       }
@@ -334,17 +232,13 @@ class AuthSystem {
     formElement.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const emailField = formElement.querySelector('[name="email"], #loginEmail, #email');
-      const passField = formElement.querySelector('[name="password"], #loginPassword, #password');
-
-      const email = emailField?.value || '';
-      const password = passField?.value || '';
+      const email = formElement.querySelector('[name="email"]')?.value || '';
+      const password = formElement.querySelector('[name="password"]')?.value || '';
 
       const result = await this.login(email, password);
 
       if (result.success) {
-        this.showToast('✓ Login realizado com sucesso!', 'success');
-        
+        this.showToast('✓ Login realizado!', 'success');
         setTimeout(() => {
           if (result.user && this.isAdmin(result.user.email)) {
             window.location.href = 'admin.html';
@@ -360,74 +254,29 @@ class AuthSystem {
     });
   }
 
-  // ==========================================
   // TOAST
-  // ==========================================
-  
   showToast(message, type = 'info') {
-    const colors = {
-      success: '#14d0d6',
-      error: '#ff3b30',
-      info: '#0ea5e9'
-    };
-
+    const colors = { success: '#14d0d6', error: '#ff3b30', info: '#0ea5e9' };
     const toast = document.createElement('div');
     toast.textContent = message;
-    toast.style.cssText = `
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: ${colors[type]};
-      color: ${type === 'error' ? '#fff' : '#000'};
-      padding: 16px 24px;
-      border-radius: 8px;
-      font-weight: 600;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      z-index: 9999;
-      animation: authSlideIn 0.3s ease;
-      font-family: Arial, sans-serif;
-    `;
-    
+    toast.style.cssText = `position:fixed;bottom:30px;right:30px;background:${colors[type]};color:${type === 'error' ? '#fff' : '#000'};padding:16px 24px;border-radius:8px;font-weight:600;box-shadow:0 8px 20px rgba(0,0,0,0.3);z-index:9999;animation:authSlideIn 0.3s ease;`;
     document.body.appendChild(toast);
-    
     setTimeout(() => {
       toast.style.animation = 'authSlideOut 0.3s ease';
       setTimeout(() => toast.remove(), 300);
     }, 3000);
   }
 
-  // ==========================================
-  // TRACK EVENT
-  // ==========================================
-  
-  trackEvent(eventName, data) {
-    console.log(`📊 Event: ${eventName}`, data);
-  }
-
-  // ==========================================
-  // SANITIZAÇÃO
-  // ==========================================
-  
-  escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
-
-  // ==========================================
-  // INICIALIZAÇÃO
-  // ==========================================
-  
+  // INIT
   init() {
-    const signupForm = document.querySelector('#signupForm, form[name="signup"], form.signup');
-    const loginForm = document.querySelector('#loginForm, form[name="login"], form.login');
+    const signupForm = document.querySelector('#signupForm, form[name="signup"]');
+    const loginForm = document.querySelector('#loginForm, form[name="login"]');
 
     if (signupForm) this.handleSignupForm(signupForm);
     if (loginForm) this.handleLoginForm(loginForm);
 
     this.updateUI();
 
-    // ✅ API Global
     window.NovamodaAuth = {
       requireAuth: (redirect) => this.requireAuth(redirect),
       requireAdmin: (redirect) => this.requireAdmin(redirect),
@@ -437,28 +286,17 @@ class AuthSystem {
       isAdmin: (email) => this.isAdmin(email)
     };
 
-    console.log('✅ Auth System v6.0 FINAL (SINCRONIZADO)');
-    console.log('🔐 Status login:', this.isLoggedIn(), this.getSession());
+    console.log('✅ Auth v7.0 - 100% Banco (ZERO localStorage)');
   }
 }
 
-// CSS para animações
+// CSS
 if (!document.getElementById('auth-animations')) {
   const styleEl = document.createElement('style');
   styleEl.id = 'auth-animations';
-  styleEl.textContent = `
-    @keyframes authSlideIn {
-      from { transform: translateX(400px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes authSlideOut {
-      from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(400px); opacity: 0; }
-    }
-  `;
+  styleEl.textContent = `@keyframes authSlideIn{from{transform:translateX(400px);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes authSlideOut{from{transform:translateX(0);opacity:1}to{transform:translateX(400px);opacity:0}}`;
   document.head.appendChild(styleEl);
 }
 
-// Inicializar
 const auth = new AuthSystem();
 window.auth = auth;
