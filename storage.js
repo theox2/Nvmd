@@ -1,6 +1,6 @@
 /**
- * storage.js - Sistema de armazenamento COM BANCO DE DADOS
- * Gerencia: Autenticação, Carrinho, Pedidos e UI do Header
+ * storage.js - Sistema 100% COM BANCO DE DADOS
+ * ZERO localStorage - TUDO na API PHP
  */
 
 const API_BASE = window.API_BASE || (window.location.origin + '/Novamoda/api');
@@ -9,6 +9,7 @@ class Storage {
   constructor() {
     this.user = null;
     this.cart = [];
+    this.favorites = [];
     this.ADMIN_EMAILS = [
       'admin@novamoda.com',
       'nicollastheodoro97@gmail.com'
@@ -20,37 +21,38 @@ class Storage {
   // INICIALIZAÇÃO
   // ==========================================
   async init() {
-    // ✅ Verificar cookies primeiro
-    console.log('🍪 Cookies disponíveis:', document.cookie);
+    console.log('🚀 Iniciando Storage 100% Banco de Dados');
     
+    // Verificar sessão via cookie
     const userSession = this.getCookie('novamoda_user');
-    console.log('👤 Cookie novamoda_user:', userSession);
-    
     if (userSession) {
       try {
         this.user = JSON.parse(userSession);
-        console.log('✅ Usuário carregado:', this.user);
+        console.log('✅ Usuário:', this.user.nome);
       } catch (e) {
         console.error('❌ Erro ao parsear usuário:', e);
         this.user = null;
       }
-    } else {
-      console.warn('⚠️ Cookie novamoda_user não encontrado');
     }
     
-    await this.loadCartFromServer();
+    // Carregar dados do servidor
+    if (this.user) {
+      await Promise.all([
+        this.loadCartFromServer(),
+        this.loadFavoritesFromServer()
+      ]);
+    }
     
-    // ✅ Atualizar UI quando DOM estiver pronto
+    // Atualizar UI
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => this.updateUI());
     } else {
       this.updateUI();
     }
     
-    // ✅ Atualizar UI novamente após 500ms (garantir que carregou)
     setTimeout(() => this.updateUI(), 500);
     
-    console.log('✅ Storage inicializado COM BANCO DE DADOS');
+    console.log('✅ Storage 100% Banco inicializado');
   }
 
   // ==========================================
@@ -73,7 +75,7 @@ class Storage {
   }
 
   // ==========================================
-  // USUÁRIO
+  // AUTENTICAÇÃO
   // ==========================================
   async login(email, password) {
     try {
@@ -89,6 +91,13 @@ class Storage {
         this.user = data.user;
         this.setCookie('novamoda_user', JSON.stringify(data.user));
         this.setCookie('novamoda_token', data.token);
+        
+        // Carregar dados do usuário
+        await Promise.all([
+          this.loadCartFromServer(),
+          this.loadFavoritesFromServer()
+        ]);
+        
         this.updateUI();
         return { success: true, user: data.user };
       } else {
@@ -128,9 +137,9 @@ class Storage {
   logout() {
     this.user = null;
     this.cart = [];
+    this.favorites = [];
     this.deleteCookie('novamoda_user');
     this.deleteCookie('novamoda_token');
-    localStorage.removeItem('novamoda_user');
     this.updateUI();
     window.location.href = 'index.html';
   }
@@ -151,82 +160,7 @@ class Storage {
   }
 
   // ==========================================
-  // UI - ATUALIZAR HEADER
-  // ==========================================
-  updateUI() {
-    console.log('🎨 updateUI chamado. Usuário:', this.user);
-    
-    document.querySelectorAll('.novamoda-user-area').forEach(el => {
-      console.log('🗑️ Removendo área existente');
-      el.remove();
-    });
-
-    const userArea = document.createElement('div');
-    userArea.className = 'novamoda-user-area';
-    userArea.style.cssText = 'display:flex;align-items:center;gap:10px;';
-
-    if (this.user) {
-      const firstName = (this.user.name || this.user.nome || 'Usuário').split(' ')[0];
-      const isUserAdmin = this.isAdmin(this.user.email);
-      
-      console.log('✅ Criando UI logada para:', firstName);
-      
-      userArea.innerHTML = `
-        <div style="display:flex;align-items:center;gap:12px;background:#111;padding:8px 12px;border-radius:8px;">
-          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#14d0d6,#0ea5e9);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;">
-            ${firstName[0].toUpperCase()}
-          </div>
-          <div>
-            <div style="color:#fff;font-size:13px;font-weight:600;">Olá, ${this.escapeHtml(firstName)}</div>
-            <div style="font-size:11px;color:#888;">${isUserAdmin ? '👑 Admin' : 'Cliente'}</div>
-          </div>
-        </div>
-        ${isUserAdmin ? '<a href="admin.html" class="btn" style="padding:8px 12px;font-size:13px;margin-left:8px;">📊 Admin</a>' : ''}
-        <button id="storage-logout-btn" class="btn" style="background:#222;color:#aaa;padding:8px 12px;font-size:13px;border:none;border-radius:6px;cursor:pointer;">Sair</button>
-      `;
-    } else {
-      console.log('⚪ Criando UI deslogada');
-      userArea.innerHTML = '<a href="login.html" class="btn entrar-btn">Entrar</a>';
-    }
-
-    const rightArea = document.querySelector('.right-area');
-    const entrarBtn = document.querySelector('.entrar-btn');
-    
-    console.log('📍 rightArea:', rightArea);
-    console.log('📍 entrarBtn:', entrarBtn);
-    
-    if (entrarBtn) {
-      console.log('✅ Substituindo botão Entrar');
-      entrarBtn.replaceWith(userArea);
-    } else if (rightArea) {
-      const icons = rightArea.querySelector('.icons');
-      if (icons) {
-        console.log('✅ Inserindo antes dos ícones');
-        rightArea.insertBefore(userArea, icons);
-      } else {
-        console.log('✅ Adicionando ao final da rightArea');
-        rightArea.appendChild(userArea);
-      }
-    } else {
-      console.warn('⚠️ Não encontrou onde inserir o userArea!');
-    }
-
-    const logoutBtn = document.getElementById('storage-logout-btn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', () => this.logout());
-    }
-
-    console.log('🎨 UI atualizada:', this.user ? 'Logado' : 'Deslogado');
-  }
-
-  escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
-
-  // ==========================================
-  // CARRINHO - USA BANCO DE DADOS
+  // CARRINHO - 100% BANCO DE DADOS
   // ==========================================
   async loadCartFromServer() {
     if (!this.user) {
@@ -239,27 +173,17 @@ class Storage {
       const response = await fetch(`${API_BASE}/carrinho/listar.php?usuario_id=${this.user.id}`);
       const data = await response.json();
 
-      console.log('📦 Resposta da API do carrinho:', data);
-
       if (data.success && data.data.itens) {
-        // ✅ MAPEAMENTO CORRETO DOS CAMPOS DO PHP
-        this.cart = data.data.itens.map(item => {
-          const mappedItem = {
-            id: item.produto_id,
-            name: item.produto_nome,  // ✅ produto_nome (não nome_produto)
-            price: parseFloat(item.preco_unitario),
-            img: item.imagem_principal || item.imagem || 'https://via.placeholder.com/400',  // ✅ imagem_principal
-            qty: item.quantidade,
-            size: item.tamanho,
-            color: item.cor
-          };
-          console.log('✅ Item mapeado:', mappedItem);
-          return mappedItem;
-        });
-        
-        console.log('✅ Carrinho carregado:', this.cart);
+        this.cart = data.data.itens.map(item => ({
+          id: item.produto_id,
+          name: item.produto_nome,
+          price: parseFloat(item.preco_unitario),
+          img: item.imagem_principal || 'https://via.placeholder.com/400',
+          qty: item.quantidade,
+          size: item.tamanho,
+          color: item.cor
+        }));
       } else {
-        console.log('⚠️ Carrinho vazio ou erro na API');
         this.cart = [];
       }
       
@@ -272,8 +196,8 @@ class Storage {
 
   async addToCart(product, qty = 1) {
     if (!this.user) {
-      alert('Faça login para adicionar produtos ao carrinho');
-      window.location.href = 'login.html';
+      this.showToast('Faça login para adicionar ao carrinho', 'info');
+      setTimeout(() => window.location.href = 'login.html', 1500);
       return false;
     }
 
@@ -294,7 +218,7 @@ class Storage {
 
       if (data.success) {
         await this.loadCartFromServer();
-        this.showToast(`✓ ${product.name} adicionado ao carrinho!`, 'success');
+        this.showToast(`✓ ${product.name} adicionado!`, 'success');
         return true;
       } else {
         this.showToast(data.message, 'error');
@@ -406,7 +330,96 @@ class Storage {
   }
 
   // ==========================================
-  // PEDIDOS
+  // FAVORITOS - 100% BANCO DE DADOS
+  // ==========================================
+  async loadFavoritesFromServer() {
+    if (!this.user) {
+      this.favorites = [];
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE}/favoritos/listar.php?usuario_id=${this.user.id}`);
+      const data = await response.json();
+
+      if (data.success && data.data) {
+        this.favorites = data.data.map(f => f.produto_id);
+      } else {
+        this.favorites = [];
+      }
+    } catch (error) {
+      console.error('❌ Erro ao carregar favoritos:', error);
+      this.favorites = [];
+    }
+  }
+
+  async addToFavorites(productId) {
+    if (!this.user) {
+      this.showToast('Faça login para favoritar', 'info');
+      return false;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE}/favoritos/adicionar.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          usuario_id: this.user.id,
+          produto_id: productId
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await this.loadFavoritesFromServer();
+        this.showToast('✓ Adicionado aos favoritos!', 'success');
+        return true;
+      } else {
+        this.showToast(data.message, 'error');
+        return false;
+      }
+    } catch (error) {
+      console.error('Erro ao favoritar:', error);
+      return false;
+    }
+  }
+
+  async removeFromFavorites(productId) {
+    try {
+      const response = await fetch(`${API_BASE}/favoritos/remover.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          usuario_id: this.user.id,
+          produto_id: productId
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await this.loadFavoritesFromServer();
+        this.showToast('Removido dos favoritos', 'info');
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Erro ao remover favorito:', error);
+      return false;
+    }
+  }
+
+  isFavorite(productId) {
+    return this.favorites.includes(productId);
+  }
+
+  getFavorites() {
+    return this.favorites;
+  }
+
+  // ==========================================
+  // PEDIDOS - 100% BANCO DE DADOS
   // ==========================================
   async getOrders() {
     if (!this.user) return [];
@@ -427,7 +440,7 @@ class Storage {
 
   async saveOrder(orderData) {
     if (!this.user) {
-      alert('Faça login para finalizar a compra');
+      this.showToast('Faça login para finalizar a compra', 'error');
       return null;
     }
 
@@ -480,7 +493,64 @@ class Storage {
   }
 
   // ==========================================
-  // TOAST NOTIFICATIONS
+  // UI
+  // ==========================================
+  updateUI() {
+    document.querySelectorAll('.novamoda-user-area').forEach(el => el.remove());
+
+    const userArea = document.createElement('div');
+    userArea.className = 'novamoda-user-area';
+    userArea.style.cssText = 'display:flex;align-items:center;gap:10px;';
+
+    if (this.user) {
+      const firstName = (this.user.name || this.user.nome || 'Usuário').split(' ')[0];
+      const isUserAdmin = this.isAdmin(this.user.email);
+      
+      userArea.innerHTML = `
+        <div style="display:flex;align-items:center;gap:12px;background:#111;padding:8px 12px;border-radius:8px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#14d0d6,#0ea5e9);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;">
+            ${firstName[0].toUpperCase()}
+          </div>
+          <div>
+            <div style="color:#fff;font-size:13px;font-weight:600;">Olá, ${this.escapeHtml(firstName)}</div>
+            <div style="font-size:11px;color:#888;">${isUserAdmin ? '👑 Admin' : 'Cliente'}</div>
+          </div>
+        </div>
+        ${isUserAdmin ? '<a href="admin.html" class="btn" style="padding:8px 12px;font-size:13px;margin-left:8px;">📊 Admin</a>' : ''}
+        <button id="storage-logout-btn" class="btn" style="background:#222;color:#aaa;padding:8px 12px;font-size:13px;border:none;border-radius:6px;cursor:pointer;">Sair</button>
+      `;
+    } else {
+      userArea.innerHTML = '<a href="login.html" class="btn entrar-btn">Entrar</a>';
+    }
+
+    const rightArea = document.querySelector('.right-area');
+    const entrarBtn = document.querySelector('.entrar-btn');
+    
+    if (entrarBtn) {
+      entrarBtn.replaceWith(userArea);
+    } else if (rightArea) {
+      const icons = rightArea.querySelector('.icons');
+      if (icons) {
+        rightArea.insertBefore(userArea, icons);
+      } else {
+        rightArea.appendChild(userArea);
+      }
+    }
+
+    const logoutBtn = document.getElementById('storage-logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => this.logout());
+    }
+  }
+
+  escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // ==========================================
+  // TOAST
   // ==========================================
   showToast(message, type = 'info') {
     const colors = {
@@ -514,11 +584,11 @@ class Storage {
   }
 }
 
-// Inicializar storage globalmente
+// Inicializar
 const storage = new Storage();
 window.storage = storage;
 
-// CSS para animações
+// CSS
 if (!document.getElementById('storage-animations')) {
   const styleEl = document.createElement('style');
   styleEl.id = 'storage-animations';
