@@ -1,6 +1,9 @@
 /**
  * storage.js - Sistema 100% COM BANCO DE DADOS
  * ZERO localStorage - TUDO na API PHP
+ * 
+ * @author NovaModa Team
+ * @version 3.0.0
  */
 
 const API_BASE = window.API_BASE || (window.location.origin + '/Novamoda/api');
@@ -28,10 +31,11 @@ class Storage {
     if (userSession) {
       try {
         this.user = JSON.parse(userSession);
-        console.log('✅ Usuário:', this.user.nome);
+        console.log('✅ Usuário:', this.user.nome || this.user.name);
       } catch (e) {
         console.error('❌ Erro ao parsear usuário:', e);
         this.user = null;
+        this.deleteCookie('novamoda_user');
       }
     }
     
@@ -60,7 +64,7 @@ class Storage {
   // ==========================================
   setCookie(name, value, days = 7) {
     const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
   }
 
   getCookie(name) {
@@ -173,10 +177,10 @@ class Storage {
       const response = await fetch(`${API_BASE}/carrinho/listar.php?usuario_id=${this.user.id}`);
       const data = await response.json();
 
-      if (data.success && data.data.itens) {
+      if (data.success && data.data?.itens) {
         this.cart = data.data.itens.map(item => ({
           id: item.produto_id,
-          name: item.produto_nome,
+          name: item.produto_nome || item.nome_produto,
           price: parseFloat(item.preco_unitario),
           img: item.imagem_principal || 'https://via.placeholder.com/400',
           qty: item.quantidade,
@@ -191,6 +195,7 @@ class Storage {
     } catch (error) {
       console.error('❌ Erro ao carregar carrinho:', error);
       this.cart = [];
+      this.updateCartCount();
     }
   }
 
@@ -289,13 +294,14 @@ class Storage {
   }
 
   async clearCart() {
+    if (!this.user) return false;
+
     try {
-      const response = await fetch(`${API_BASE}/carrinho/remover.php`, {
+      const response = await fetch(`${API_BASE}/carrinho/limpar.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          usuario_id: this.user.id,
-          limpar_tudo: true
+          usuario_id: this.user.id
         })
       });
 
@@ -356,6 +362,7 @@ class Storage {
   async addToFavorites(productId) {
     if (!this.user) {
       this.showToast('Faça login para favoritar', 'info');
+      setTimeout(() => window.location.href = 'login.html', 1500);
       return false;
     }
 
@@ -496,6 +503,7 @@ class Storage {
   // UI
   // ==========================================
   updateUI() {
+    // Remove elementos antigos
     document.querySelectorAll('.novamoda-user-area').forEach(el => el.remove());
 
     const userArea = document.createElement('div');
@@ -507,22 +515,23 @@ class Storage {
       const isUserAdmin = this.isAdmin(this.user.email);
       
       userArea.innerHTML = `
-        <div style="display:flex;align-items:center;gap:12px;background:#111;padding:8px 12px;border-radius:8px;">
-          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#14d0d6,#0ea5e9);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;">
+        <div style="display:flex;align-items:center;gap:12px;background:#111;padding:8px 12px;border-radius:8px;border:1px solid #222;">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#14d0d6,#0ea5e9);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;font-size:14px;">
             ${firstName[0].toUpperCase()}
           </div>
           <div>
-            <div style="color:#fff;font-size:13px;font-weight:600;">Olá, ${this.escapeHtml(firstName)}</div>
+            <div style="color:#fff;font-size:13px;font-weight:600;">${this.escapeHtml(firstName)}</div>
             <div style="font-size:11px;color:#888;">${isUserAdmin ? '👑 Admin' : 'Cliente'}</div>
           </div>
         </div>
-        ${isUserAdmin ? '<a href="admin.html" class="btn" style="padding:8px 12px;font-size:13px;margin-left:8px;">📊 Admin</a>' : ''}
-        <button id="storage-logout-btn" class="btn" style="background:#222;color:#aaa;padding:8px 12px;font-size:13px;border:none;border-radius:6px;cursor:pointer;">Sair</button>
+        ${isUserAdmin ? '<a href="admin.html" class="btn" style="padding:8px 12px;font-size:13px;margin-left:8px;background:#14d0d6;color:#000;border-radius:6px;text-decoration:none;">📊 Admin</a>' : ''}
+        <button id="storage-logout-btn" class="btn" style="background:#222;color:#aaa;padding:8px 12px;font-size:13px;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Sair</button>
       `;
     } else {
       userArea.innerHTML = '<a href="login.html" class="btn entrar-btn">Entrar</a>';
     }
 
+    // Inserir no header
     const rightArea = document.querySelector('.right-area');
     const entrarBtn = document.querySelector('.entrar-btn');
     
@@ -537,6 +546,7 @@ class Storage {
       }
     }
 
+    // Adicionar listener ao botão de logout
     const logoutBtn = document.getElementById('storage-logout-btn');
     if (logoutBtn) {
       logoutBtn.addEventListener('click', () => this.logout());
@@ -573,6 +583,7 @@ class Storage {
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
       z-index: 9999;
       animation: storageSlideIn 0.3s ease;
+      font-family: Inter, Arial, sans-serif;
     `;
     
     document.body.appendChild(toast);
@@ -604,3 +615,5 @@ if (!document.getElementById('storage-animations')) {
   `;
   document.head.appendChild(styleEl);
 }
+
+console.log('✅ Storage v3.0.0 carregado - 100% Banco de Dados');
