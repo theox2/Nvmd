@@ -1,61 +1,64 @@
 <?php
 /**
- * api/favoritos/remover.php - Remover produto dos favoritos
- * Método: POST/DELETE
- * Body: { usuario_id, produto_id }
+ * api/carrinho/limpar.php - Limpar todo o carrinho do usuário
+ * Método: POST
+ * Body: { usuario_id }
  */
 
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, DELETE');
+header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
 require_once '../../config.php';
 
-if (!in_array($_SERVER['REQUEST_METHOD'], ['POST', 'DELETE'])) {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    die(json_encode(['success' => false, 'message' => 'Apenas POST ou DELETE permitido']));
+    die(json_encode(['success' => false, 'message' => 'Apenas POST permitido']));
 }
 
 $input = json_decode(file_get_contents('php://input'), true);
 
 try {
     $usuario_id = $input['usuario_id'] ?? null;
-    $produto_id = $input['produto_id'] ?? null;
     
-    if (!$usuario_id || !$produto_id) {
+    if (!$usuario_id) {
         http_response_code(400);
         echo json_encode([
             'success' => false,
-            'message' => 'usuario_id e produto_id são obrigatórios'
+            'message' => 'usuario_id é obrigatório'
         ]);
         exit;
     }
     
-    // Remover dos favoritos
-    $stmt = $pdo->prepare("
-        DELETE FROM favoritos 
-        WHERE usuario_id = ? AND produto_id = ?
-    ");
-    $stmt->execute([$usuario_id, $produto_id]);
+    // Buscar o carrinho do usuário
+    $stmt = $pdo->prepare("SELECT id FROM carrinhos WHERE usuario_id = ?");
+    $stmt->execute([$usuario_id]);
+    $carrinho = $stmt->fetch();
     
-    if ($stmt->rowCount() > 0) {
+    if (!$carrinho) {
         echo json_encode([
             'success' => true,
-            'message' => 'Produto removido dos favoritos'
+            'message' => 'Carrinho já estava vazio'
         ], JSON_UNESCAPED_UNICODE);
-    } else {
-        echo json_encode([
-            'success' => false,
-            'message' => 'Produto não estava nos favoritos'
-        ], JSON_UNESCAPED_UNICODE);
+        exit;
     }
+    
+    // Remover todos os itens do carrinho
+    $stmt = $pdo->prepare("DELETE FROM carrinho_itens WHERE carrinho_id = ?");
+    $stmt->execute([$carrinho['id']]);
+    
+    echo json_encode([
+        'success' => true,
+        'message' => 'Carrinho limpo com sucesso',
+        'itens_removidos' => $stmt->rowCount()
+    ], JSON_UNESCAPED_UNICODE);
     
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Erro ao remover favorito',
+        'message' => 'Erro ao limpar carrinho',
         'error' => $e->getMessage()
     ]);
 }
